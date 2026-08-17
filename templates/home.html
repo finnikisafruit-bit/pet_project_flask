@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p>{{ text }}</p>
+<ul>
+    {% for item in items %}
+    <a href="/item/{{ item.id }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size }}</a>
+    {% endfor %}
+</ul>
+{% endblock %}

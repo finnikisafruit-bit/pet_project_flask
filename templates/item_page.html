@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Карточка товара{% endblock %}
+{% block content %}
+<h1>{{ item.name }}</h1>
+<p>Цена: {{ item.price }} ₽</p>
+<p>Размер: {{ item.size }}</p>
+<p>Владелец: {{ item.owner.username}}</p>
+<a href="/">Назад</a>
+{% endblock %}

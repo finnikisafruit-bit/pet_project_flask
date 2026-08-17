@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Добавить товар{% endblock %}
+{% block content %}
+<form method="POST">
+    <input name='name' placeholder="Название" required>
+    <input name="price" type="number" placeholder="Цена" required>
+    <input name="size" placeholder="Размер" required>
+    <button type="submit">Добавить</button>
+</form>
+<a href="/">На главную</a>
+{% endblock %}

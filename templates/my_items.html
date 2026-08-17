@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Мои товары{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<ul>
+    {% for item in items %}
+    <a href="/item/{{ item.id }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size }}</a>
+    {% endfor %}
+</ul>
+
+{% if not items %}
+<p>У вас пока нет объявлений<a href="/add">Добавить</a></p>
+{% endif %}
+
+{% endblock %}
