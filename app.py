@@ -69,6 +69,37 @@ def logout():
     return redirect(url_for("home"))
 
 
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+
+@app.route("/profile/edit", methods=["GET", "POST"])
+@login_required
+def edit_profile():
+    if request.method == "POST":
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        existing = db_session.query(User).filter_by(username=username).first()
+        if existing and existing.id != current_user.id:
+            return "Username уже занят", 400
+
+        existing = db_session.query(User).filter_by(email=email).first()
+        if existing and existing.id != current_user.id:
+            return "Email уже занят", 400
+
+        current_user.username = username
+        current_user.email = email
+        if password:
+            current_user.set_password(password)
+        db_session.commit()
+        return redirect(url_for("profile"))
+    return render_template("edit_profile.html")
+
+
 @app.route("/about")
 def about():
     return render_template(
@@ -101,6 +132,37 @@ def add_item():
         db_session.commit()
         return redirect(url_for("home"))
     return render_template("add.html")
+
+
+@app.route("/item/<int:item_id>/delete", methods=["POST"])
+@login_required
+def delete_item(item_id):
+    item = db_session.get(Product, item_id)
+    if item is None:
+        return "Не найден", 404
+    if item.user_id != current_user.id:
+        return "Нет доступа", 403
+    db_session.delete(item)
+    db_session.commit()
+    return redirect(url_for("my_items"))
+
+
+@app.route("/item/<int:item_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_item(item_id):
+    item = db_session.get(Product, item_id)
+    if item is None:
+        return "Не найден", 404
+    if item.user_id != current_user.id:
+        return "Нет доступа", 403
+
+    if request.method == "POST":
+        item.name = request.form["name"]
+        item.price = int(request.form["price"])
+        item.size = request.form["size"]
+        db_session.commit()
+        return redirect(url_for("item_page", item_id=item.id))
+    return render_template("edit_item.html", item=item)
 
 
 @app.route("/my_items")

@@ -5,5 +5,11 @@
 <p>Цена: {{ item.price }} ₽</p>
 <p>Размер: {{ item.size }}</p>
 <p>Владелец: {{ item.owner.username}}</p>
+{% if current_user.is_authenticated and current_user.id == item.user_id %}
+<form method="POST" action="/item/{{ item.id }}/delete">
+    <button type="submit">Удалить</button>
+</form>
+<a href="/item/{{ item.id }}/edit">Редактировать</a>
+{% endif %}
 <a href="/">Назад</a>
 {% endblock %}

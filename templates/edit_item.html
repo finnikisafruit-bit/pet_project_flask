@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Редактировать{% endblock %}
+{% block content %}
+<h1>Редактировать карточку товара</h1>
+<form method="POST">
+    <input name='name' value="{{ item.name }}" placeholder="Название" required>
+    <input name="price" type="number" value="{{ item.price }}" placeholder="Цена" required>
+    <input name="size" value="{{ item.size }}" placeholder="Размер" required>
+    <button type="submit">Сохранить</button>
+</form>
+<a href="/item/{{ item.id }}">Отмена</a>
+{% endblock %}

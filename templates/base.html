@@ -13,7 +13,7 @@
         <a href="/my_items">Мои объявления</a>
 
         {% if current_user.is_authenticated %}
-        <span>Привет, {{ current_user.username }}!</span>
+        Привет, <a href="/profile">{{ current_user.username }}</a>!
         <a href="/logout">Выйти</a>
         {% else %}
         <a href="/register">Регистрация</a>
