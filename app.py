@@ -9,6 +9,7 @@ from flask_login import (
 
 from config import SECRET_KEY
 from db import db_session
+from forms import LoginForm
 from models import Product, User
 
 app = Flask(__name__)
@@ -52,15 +53,14 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        user = db_session.query(User).filter_by(username=username).first()
-        if user and user.check_password(password):
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = db_session.query(User).filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
             login_user(user)
             return redirect(url_for("home"))
         return "Неверный логин и пароль", 401
-    return render_template("login.html")
+    return render_template("login.html", form=form)
 
 
 @app.route("/logout")
