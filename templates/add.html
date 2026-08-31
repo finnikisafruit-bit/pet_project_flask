@@ -1,11 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Добавить товар{% endblock %}
 {% block content %}
+<h1>Добавить товар</h1>
 <form method="POST">
-    <input name='name' placeholder="Название" required>
-    <input name="price" type="number" placeholder="Цена" required>
-    <input name="size" placeholder="Размер" required>
-    <button type="submit">Добавить</button>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name() }}
+        {% for error in form.name.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.price.label }}<br>
+        {{ form.price() }}
+        {% for error in form.price.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.size.label }}<br>
+        {{ form.size() }}
+        {% for error in form.size.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.submit() }}
+    </p>
 </form>
-<a href="/">На главную</a>
+<a href="{{ url_for('home') }}">На главную</a>
 {% endblock %}

@@ -9,7 +9,7 @@ from flask_login import (
 
 from config import SECRET_KEY
 from db import db_session
-from forms import LoginForm
+from forms import EditProfileForm, LoginForm, RegisterForm, ProductForm
 from models import Product, User
 
 app = Flask(__name__)
@@ -37,18 +37,14 @@ def home():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-        username = request.form["username"]
-        email = request.form["email"]
-        password = request.form["password"]
-        if db_session.query(User).filter_by(username=username).first():
-            return "Пользователь уже существует", 400
-        user = User(username=username, email=email)
-        user.set_password(password)
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
         db_session.add(user)
         db_session.commit()
         return redirect(url_for("home"))
-    return render_template("register.html")
+    return render_template("register.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -78,26 +74,15 @@ def profile():
 @app.route("/profile/edit", methods=["GET", "POST"])
 @login_required
 def edit_profile():
-    if request.method == "POST":
-        username = request.form["username"]
-        email = request.form["email"]
-        password = request.form["password"]
-
-        existing = db_session.query(User).filter_by(username=username).first()
-        if existing and existing.id != current_user.id:
-            return "Username уже занят", 400
-
-        existing = db_session.query(User).filter_by(email=email).first()
-        if existing and existing.id != current_user.id:
-            return "Email уже занят", 400
-
-        current_user.username = username
-        current_user.email = email
-        if password:
-            current_user.set_password(password)
+    form = EditProfileForm(obj=current_user)
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        if form.password.data:
+            current_user.set_password(form.password.data)
         db_session.commit()
         return redirect(url_for("profile"))
-    return render_template("edit_profile.html")
+    return render_template("edit_profile.html", form=form)
 
 
 @app.route("/about")
@@ -123,15 +108,18 @@ def item_page(item_id):
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add_item():
-    if request.method == "POST":
-        name = request.form["name"]
-        price = int(request.form["price"])
-        size = request.form["size"]
-        product = Product(name=name, price=price, size=size, user_id=current_user.id)
+    form = ProductForm()
+    if form.validate_on_submit():
+        product = Product(
+            name=form.name.data,
+            price=form.price.data,
+            size=form.size.data,
+            user_id=current_user.id,
+        )
         db_session.add(product)
         db_session.commit()
         return redirect(url_for("home"))
-    return render_template("add.html")
+    return render_template("add.html", form=form)
 
 
 @app.route("/item/<int:item_id>/delete", methods=["POST"])

@@ -3,10 +3,38 @@
 {% block content %}
 <h1>Редактировать профиль</h1>
 <form method="POST">
-    <input name='username' value="{{ current_user.username }}" required>
-    <input name="email" type="email" value="{{ current_user.email }}" required>
-    <input name="password" type="password" placeholder="Новый пароль (необязательно)">
-    <button type="submit">Сохранить</button>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.username.label }}<br>
+        {{ form.username() }}
+        {% for error in form.username.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email() }}
+        {% for error in form.email.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password() }}
+        {% for error in form.password.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password2.label }}<br>
+        {{ form.password2() }}
+        {% for error in form.password2.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.submit() }}
+    </p>
 </form>
-<a href="/profile">Отмена</a>
+<a href="{{ url_for('profile') }}">Отмена</a>
 {% endblock %}
