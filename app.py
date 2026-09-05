@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, url_for
 from flask_login import (
     LoginManager,
     current_user,
@@ -43,6 +43,7 @@ def register():
         user.set_password(form.password.data)
         db_session.add(user)
         db_session.commit()
+        flash("Регистрация успешна", "success")
         return redirect(url_for("home"))
     return render_template("register.html", form=form)
 
@@ -54,6 +55,7 @@ def login():
         user = db_session.query(User).filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
+            flash("Вы вошли", "success")
             return redirect(url_for("home"))
         return "Неверный логин и пароль", 401
     return render_template("login.html", form=form)
@@ -62,6 +64,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash("Вы вышли", "info")
     return redirect(url_for("home"))
 
 
@@ -81,6 +84,7 @@ def edit_profile():
         if form.password.data:
             current_user.set_password(form.password.data)
         db_session.commit()
+        flash("Профиль обновлён", "success")
         return redirect(url_for("profile"))
     return render_template("edit_profile.html", form=form)
 
@@ -118,6 +122,7 @@ def add_item():
         )
         db_session.add(product)
         db_session.commit()
+        flash("Товар добавлен", "success")
         return redirect(url_for("home"))
     return render_template("add.html", form=form)
 
@@ -132,6 +137,7 @@ def delete_item(item_id):
         return "Нет доступа", 403
     db_session.delete(item)
     db_session.commit()
+    flash("Товар удалён", "success")
     return redirect(url_for("my_items"))
 
 
@@ -144,13 +150,17 @@ def edit_item(item_id):
     if item.user_id != current_user.id:
         return "Нет доступа", 403
 
-    if request.method == "POST":
-        item.name = request.form["name"]
-        item.price = int(request.form["price"])
-        item.size = request.form["size"]
+    form = ProductForm(obj=item)
+    form.submit.label.text = "Сохранить"
+
+    if form.validate_on_submit():
+        item.name = form.name.data
+        item.price = form.price.data
+        item.size = form.size.data
         db_session.commit()
+        flash("Товар обновлён", "success")
         return redirect(url_for("item_page", item_id=item.id))
-    return render_template("edit_item.html", item=item)
+    return render_template("edit_item.html", form=form, item=item)
 
 
 @app.route("/my_items")

@@ -20,6 +20,18 @@
         <a href="/login">Войти</a>
         {% endif %}
     </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p style="padding: 8px; border: 1px solid #ccc;
+                {% if category == 'success' %}background: #d4edda;
+                {% elif category == 'danger' %}background: #f8d7da;
+                {% else %}background: #fff3cd;{% endif %}">
+        {{ message }}
+    </p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
 </body>
 
