@@ -7,17 +7,17 @@
 
 <body>
     <nav>
-        <a href="/">Главная</a>
-        <a href="/about">О компании</a>
-        <a href="/add">Добавить</a>
-        <a href="/my_items">Мои объявления</a>
+        <a href="{{ url_for('items.home') }}">Главная</a>
+        <a href="{{ url_for('items.about') }}">О компании</a>
+        <a href="{{ url_for('items.add_item') }}">Добавить</a>
+        <a href="{{ url_for('items.my_items') }}">Мои объявления</a>
 
         {% if current_user.is_authenticated %}
-        Привет, <a href="/profile">{{ current_user.username }}</a>!
-        <a href="/logout">Выйти</a>
+        Привет, <a href="{{ url_for('auth.profile') }}">{{ current_user.username }}</a>!
+        <a href="{{ url_for('auth.logout') }}">Выйти</a>
         {% else %}
-        <a href="/register">Регистрация</a>
-        <a href="/login">Войти</a>
+        <a href="{{ url_for('auth.register') }}">Регистрация</a>
+        <a href="{{ url_for('auth.login') }}">Войти</a>
         {% endif %}
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}

@@ -5,7 +5,8 @@
 <p>{{ text }}</p>
 <ul>
     {% for item in items %}
-    <a href="/item/{{ item.id }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size }}</a>
+    <a href="{{ url_for('items.item_page', item_id=item.id) }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size
+        }}</a>
     {% endfor %}
 </ul>
 {% endblock %}

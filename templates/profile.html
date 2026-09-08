@@ -4,5 +4,5 @@
 <h1>Мой профиль</h1>
 <p>Имя: {{ current_user.username }}</p>
 <p>Email: {{ current_user.email }}</p>
-<a href="/profile/edit">Редактировать</a>
+<a href="{{ url_for('auth.edit_profile') }}">Редактировать</a>
 {% endblock %}

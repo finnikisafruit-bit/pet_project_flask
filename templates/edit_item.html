@@ -29,5 +29,5 @@
         {{ form.submit() }}
     </p>
 </form>
-<a href="{{ url_for('item_page', item_id=item.id ) }}">Отмена</a>
+<a href="{{ url_for('items.item_page', item_id=item.id ) }}">Отмена</a>
 {% endblock %}

@@ -5,12 +5,13 @@
 
 <ul>
     {% for item in items %}
-    <a href="/item/{{ item.id }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size }}</a>
+    <a href="{{ url_for('items.item_page', item_id=item.id) }}">{{ item.name }} - {{ item.price }} ₽ - {{ item.size
+        }}</a>
     {% endfor %}
 </ul>
 
 {% if not items %}
-<p>У вас пока нет объявлений<a href="/add">Добавить</a></p>
+<p>У вас пока нет объявлений<a href="{{ url_for('items.add_item') }}">Добавить</a></p>
 {% endif %}
 
 {% endblock %}

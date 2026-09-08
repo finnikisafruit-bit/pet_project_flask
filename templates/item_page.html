@@ -6,10 +6,10 @@
 <p>Размер: {{ item.size }}</p>
 <p>Владелец: {{ item.owner.username}}</p>
 {% if current_user.is_authenticated and current_user.id == item.user_id %}
-<form method="POST" action="/item/{{ item.id }}/delete">
+<form method="POST" action="{{ url_for('items.delete_item', item_id=item.id) }}">
     <button type="submit">Удалить</button>
 </form>
-<a href="/item/{{ item.id }}/edit">Редактировать</a>
+<a href="{{ url_for('items.edit_item', item_id=item.id) }}">Редактировать</a>
 {% endif %}
-<a href="/">Назад</a>
+<a href="{{ url_for('items.home') }}">Назад</a>
 {% endblock %}
