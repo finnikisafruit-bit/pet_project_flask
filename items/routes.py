@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from db import db_session
-from forms import ProductForm
+from items.forms import ProductForm
 from models import Product
 
 bp = Blueprint("items", __name__)

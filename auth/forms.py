@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import IntegerField, PasswordField, StringField, SubmitField, EmailField
+from wtforms import PasswordField, StringField, SubmitField, EmailField
 from wtforms.validators import (
     DataRequired,
     Email,
     EqualTo,
     ValidationError,
     Optional,
-    Length,
 )
 
 from db import db_session
@@ -58,10 +57,3 @@ class EditProfileForm(FlaskForm):
         user = db_session.query(User).filter_by(email=email.data).first()
         if user and user.id != current_user.id:
             raise ValidationError("Email уже занят")
-
-
-class ProductForm(FlaskForm):
-    name = StringField("Название", validators=[DataRequired(), Length(max=120)])
-    price = IntegerField("Цена", validators=[DataRequired()])
-    size = StringField("Размер", validators=[DataRequired(), Length(max=4)])
-    submit = SubmitField("Добавить")
